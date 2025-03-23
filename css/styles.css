@@ -1,6 +1,6 @@
 body {
-  background: #54018b;
-  color: #f7df1e;
+  background: #ffffff;
+  color: #f71e1e;
   text-align: center;
 }
 
@@ -18,7 +18,7 @@ h2 {
   margin: 0 10px;
   outline: none;
   border: none;
-  border-bottom: 1px solid #f7de1e52;
+  border-bottom: 1px solid #27272752;
   background: transparent;
   color: #fff;
   font-size: 18px;

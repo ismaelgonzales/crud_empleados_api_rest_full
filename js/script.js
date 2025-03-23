@@ -7,37 +7,42 @@ const $fragement = $d.createDocumentFragment();
 
 const getAll = async () => {
     try {
-        let res = await axios.get("http://localhost:4444/playas")
+        let res = await axios.get("http://localhost:1337/api/empleados");
         let json = await res.data;
-        json.forEach(el => {
+
+        // Limpiar la tabla antes de agregar nuevos datos
+        $table.querySelector("tbody").innerHTML = "";
+
+        // Recorrer los datos dentro de "data"
+        json.data.forEach(el => {
             $template.querySelector(".name").textContent = el.nombre;
-            $template.querySelector(".estado").textContent = el.estado;
-            $template.querySelector(".edit").dataset.id = el.id;
-            $template.querySelector(".edit").dataset.name = el.nombre;
-            $template.querySelector(".edit").dataset.estado = el.estado;
-            $template.querySelector(".delete").dataset.id = el.id;
+            $template.querySelector(".posicion").textContent = el.posicion;
+            $template.querySelector(".departamento").textContent = el.departamento;
+            $template.querySelector(".edit").dataset.documentId = el.documentId; // Usar documentId
+            $template.querySelector(".edit").dataset.nombre = el.nombre;
+            $template.querySelector(".edit").dataset.posicion = el.posicion;
+            $template.querySelector(".edit").dataset.departamento = el.departamento;
+            $template.querySelector(".delete").dataset.documentId = el.documentId; // Usar documentId
 
             let $clone = $d.importNode($template, true);
-
             $fragement.appendChild($clone);
         });
 
         $table.querySelector("tbody").appendChild($fragement);
     } catch (error) {
         let message = error.statusText || "Ocurrió un error";
-        $table.insertAdjacentHTML("afterend", `Error: ${error.status}: ${message}`);
+        $table.insertAdjacentHTML("afterend", `<p>Error: ${error.status}: ${message}</p>`);
     }
-}
+};
 
 $d.addEventListener("DOMContentLoaded", getAll);
 
-
 $d.addEventListener("submit", async e => {
     if (e.target === $form) {
-
         e.preventDefault();
 
-        if (!e.target.id.value) {
+        if (!e.target.documentId.value) {
+            // Crear un nuevo empleado
             try {
                 let options = {
                     method: "POST",
@@ -45,21 +50,24 @@ $d.addEventListener("submit", async e => {
                         "Content-type": "application/json; charset=utf-8"
                     },
                     data: JSON.stringify({
-                        nombre: e.target.nombre.value,
-                        estado: e.target.estado.value
+                        data: {
+                            nombre: e.target.nombre.value,
+                            posicion: e.target.posicion.value,
+                            departamento: e.target.departamento.value
+                        }
                     })
                 };
 
-                let res = await axios("http://localhost:4444/playas", options)
+                let res = await axios("http://localhost:1337/api/empleados", options);
                 let json = await res.data;
 
                 location.reload();
             } catch (error) {
-                
                 let message = error.statusText || "Ocurrió un error";
-                $form.insertAdjacentHTML("afterend", `Error: ${error.status}: ${message}`);
+                $form.insertAdjacentHTML("afterend", `<p>Error: ${error.status}: ${message}</p>`);
             }
         } else {
+            // Actualizar un empleado existente
             try {
                 let options = {
                     method: "PUT",
@@ -67,39 +75,42 @@ $d.addEventListener("submit", async e => {
                         "Content-type": "application/json; charset=utf-8"
                     },
                     data: JSON.stringify({
-                        nombre: e.target.nombre.value,
-                        estado: e.target.estado.value
+                        data: {
+                            nombre: e.target.nombre.value,
+                            posicion: e.target.posicion.value,
+                            departamento: e.target.departamento.value
+                        }
                     })
                 };
 
-                let res = await axios(`http://localhost:4444/playas/${e.target.id.value}`, options)
+                let res = await axios(`http://localhost:1337/api/empleados/${e.target.documentId.value}`, options);
                 let json = await res.data;
 
                 location.reload();
             } catch (error) {
-
                 let message = error.statusText || "Ocurrió un error";
-                $form.insertAdjacentHTML("afterend", `Error: ${error.status}: ${message}`);
-                
+                $form.insertAdjacentHTML("afterend", `<p>Error: ${error.status}: ${message}</p>`);
             }
         }
     }
-})
+});
 
 $d.addEventListener("click", async e => {
     if (e.target.matches(".edit")) {
-        $title.textContent = "EDITAR PLAYA";
-        $form.nombre.value = e.target.dataset.name;
-        $form.estado.value = e.target.dataset.estado;
-        $form.id.value = e.target.dataset.id;
+        // Llenar el formulario con los datos del empleado a editar
+        $title.textContent = "EDITAR EMPLEADO";
+        $form.nombre.value = e.target.dataset.nombre;
+        $form.posicion.value = e.target.dataset.posicion;
+        $form.departamento.value = e.target.dataset.departamento;
+        $form.documentId.value = e.target.dataset.documentId; // Usar documentId
     }
 
-    if (e.target.matches(".delete")){
-        let confirmacion = confirm("¿Estás seguro que deseas eliminar el elemnto seleccionado?")
-        
+    if (e.target.matches(".delete")) {
+        // Eliminar un empleado
+        let confirmacion = confirm("¿Estás seguro que deseas eliminar el elemento seleccionado?");
+
         if (confirmacion) {
             try {
-                
                 let options = {
                     method: "DELETE",
                     headers: {
@@ -107,15 +118,14 @@ $d.addEventListener("click", async e => {
                     }
                 };
 
-                let res = await axios(`http://localhost:4444/playas/${e.target.dataset.id}`, options)
+                let res = await axios(`http://localhost:1337/api/empleados/${e.target.dataset.documentId}`, options);
                 let json = await res.data;
 
                 location.reload();
             } catch (error) {
-                
                 let message = error.statusText || "Ocurrió un error";
-                $form.insertAdjacentHTML("afterend", `Error: ${error.status}: ${message}`);
+                $form.insertAdjacentHTML("afterend", `<p>Error: ${error.status}: ${message}</p>`);
             }
         }
     }
-})
+});

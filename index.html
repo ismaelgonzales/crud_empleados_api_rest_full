@@ -1,32 +1,26 @@
 <!DOCTYPE html>
 <html lang="es-AR">
 <head>
-   <!-- CHARSET -->
    <meta charset="UTF-8">
-   <!-- IE-EDGE -->
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <!-- VIEWPORT -->
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <!-- DESCRIPTION -->
    <meta name="description" content="CRUD CON AXIOS">
-   <!-- AUTHOR -->
    <meta name="author" content="Daniel Salinas">
-   <!-- TITTLE -->
-   <title>Daniel Salinas | CRUD CON AXIOS</title>
-   <!-- STYLES -->
+   <title>Sistema de Gestión de Clientes</title>
    <link rel="stylesheet" href="./css/styles.css">
+</head>
 <body>
-
-  <h1>CRUD LOCAL CON AXIOS</h1>
+  <h1>Registro de empleados</h1>
 
   <section class="crud">
     <article>
-      <h2 class="crud-title">AGREGAR NUEVA PLAYA</h2>
+      <h2 class="crud-title">AGREGAR NUEVO EMPLEADO</h2>
       <form class="crud-form">
-        <input class="input_label" type="text" name="nombre" placeholder="Nombre de la playa" required>
-        <input class="input_label" type="text" name="estado" placeholder="Nombre del estado" required>
+        <input class="input_label" type="text" name="nombre" placeholder="Nombre del empleado" required>
+        <input class="input_label" type="text" name="posicion" placeholder="Posición" required>
+        <input class="input_label" type="text" name="departamento" placeholder="Departamento" required>
         <input class="input_submit" type="submit" value="GUARDAR">
-        <input type="hidden" name="id">
+        <input type="hidden" name="documentId"> <!-- Cambiar a documentId -->
       </form>
     </article>
 
@@ -35,7 +29,8 @@
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Estado</th>
+            <th>Posición</th>
+            <th>Departamento</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -47,7 +42,8 @@
   <template id="crud-template">
     <tr>
       <td class="name"></td>
-      <td class="estado"></td>
+      <td class="posicion"></td>
+      <td class="departamento"></td>
       <td>
         <button class="edit">Editar</button>
         <button class="delete">Eliminar</button>
